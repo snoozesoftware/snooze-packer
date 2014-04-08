@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DEVICE=
+[ -b /dev/hdb ] && DEVICE=/dev/hdb
+[ -b /dev/sdb ] && DEVICE=/dev/sdb
+[ -b /dev/vdb ] && DEVICE=/dev/vdb
+[ -b /dev/xvdb ] && DEVICE=/dev/xvdb
+[ -b /dev/sr0 ] && DEVICE=/dev/sr0
+
+if [ -b "$DEVICE" ];then
+/bin/mount -t iso9660 $DEVICE /mnt 2> /dev/null
+
+if [ -f /mnt/post-install ]; then
+bash /mnt/post-install
+fi
+
+umount /mnt 2> /dev/null
+else
+ifup eth0
+fi
+
+exit 0
