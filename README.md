@@ -1,7 +1,7 @@
-nooze-packer
+snooze-packer
 =============
 
-templates for creating Snooze virtual machines base images
+Templates for creating Snooze virtual machines base images
 
 Usage
 =====
