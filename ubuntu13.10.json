@@ -20,7 +20,14 @@
       "chmod 755 /usr/local/bin/contextualization",
       "perl -pi -e 's,^exit 0,/usr/local/bin/contextualization\nexit 0,' /etc/rc.local"  
     ]
-  }],
+  },
+  {
+    "type": "shell",
+    "execute_command": "echo '{{user `password`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+    "scripts": ["files/sshd_config.sh"]
+  }
+  
+  ],
   "builders":
   [
     {
