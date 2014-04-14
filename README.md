@@ -39,17 +39,32 @@ Grid'5000
 ========== 
 
 The virtual machines can be used inside Grid'5000. 
-In the libvirt template, make sure to give the mac address corresponding to an ip of your reserved subnet.
+Make sure to give the mac address corresponding to an ip of your reserved subnet.
+The mac address will be translated into ip during the contextualization process.
+
 For instance : 
 
 ```
-msimonin@fgrenoble:~$ g5k-subnets -im | more
+msimonin@fgrenoble:~$ g5k-subnets -im 
 10.132.8.1	00:16:3E:84:08:01
 10.132.8.2	00:16:3E:84:08:02
 10.132.8.3	00:16:3E:84:08:03
+[...]
 
 ```
-The mac address will be translated into ip during the contextualization process.
+
+In the libvirt template : 
+```
+    <interface type='bridge/ethernet...'>
+      <mac address='00:16:3E:84:08:02'/>
+```
+
+Or in the kvm arguments : 
+```
+-net nic,model=virtio,macaddr=00:16:3E:84:08:02
+```
+
+
 
 Requirements
 =============
