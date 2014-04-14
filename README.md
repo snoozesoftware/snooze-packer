@@ -1,7 +1,7 @@
 snooze-packer
 =============
 
-Templates for creating Snooze virtual machines base images
+Templates for creating Snooze virtual machines base images (as well as Grid'5000 compatible virtual machines base images).
 
 Usage
 =====
