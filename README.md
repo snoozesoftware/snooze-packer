@@ -34,6 +34,8 @@ It works like the following :
 * if it exists, mount the CD, test the presence of a script post-install, and run it as root
 * if not use default parameters.
 
+Get the iso context files from here : https://github.com/snoozesoftware/snooze-context
+
 
 Grid'5000
 ========== 
