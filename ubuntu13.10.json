@@ -24,9 +24,8 @@
   {
     "type": "shell",
     "execute_command": "echo '{{user `password`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-    "scripts": ["files/sshd_config.sh"]
+    "scripts": ["files/sshd_config.sh", "files/hadoop.sh"]
   }
-  
   ],
   "builders":
   [
