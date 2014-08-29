@@ -5,11 +5,13 @@
 # add use $DMTCP
 DMTCP_USER=work
 DMTCP_GROUP=work
+//cryp passwd
+DMTCP_USER_PASSWD=dix3mC821HkgI
 TARBALL=dmtcp.tar.gz
 SOFTWARE_ROOT=/home/$DMTCP_USER/software
 DMTCP_ROOT=$SOFTWARE_ROOT/dmtcp
 
-echo "useradd $DMTCP_USER -s /bin/bash -m"
+echo "useradd $DMTCP_USER -s /bin/bash -m -p $DMTCP_USER_PASSWD"
 useradd $DMTCP_USER -s /bin/bash -m
 
 # Move to the newly created directory
