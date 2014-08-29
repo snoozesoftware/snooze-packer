@@ -1,0 +1,70 @@
+{
+  "variables": {
+    "user"         : "snooze",
+    "password"     : "snooze",
+    "hostid"       : "ubuntu1310",
+    "iso_url"      : "http://releases.ubuntu.com/13.10/ubuntu-13.10-server-amd64.iso",
+    "iso_checksum" : "4d1a8b720cdd14b76ed9410c63a00d0e"
+  },
+  "provisioners"  : [{
+    "type"        : "file",
+    "source"      : "files/contextualization",
+    "destination" : "contextualization"
+  },
+  {
+    "type": "shell",
+    "execute_command": "echo '{{user `password`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+    "inline": [
+      "sleep 20",
+      "cp /home/{{ user `user`}}/contextualization /usr/local/bin/contextualization",
+      "chmod 755 /usr/local/bin/contextualization",
+      "perl -pi -e 's,^exit 0,/usr/local/bin/contextualization\nexit 0,' /etc/rc.local"  
+    ]
+  },
+  {
+    "type": "shell",
+    "execute_command": "echo '{{user `password`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+    "scripts": ["files/sshd_config.sh", "files/dmtcp.sh"]
+  }
+  ],
+  "builders":
+  [
+    {
+      "type"                                                                      : "qemu",
+      "iso_url"                                                                   : "{{ user `iso_url`}}",
+      "iso_checksum"                                                              : "{{ user `iso_checksum`}}",
+      "iso_checksum_type"                                                         : "md5",
+      "output_directory"                                                          : "{{ user `hostid` }}",
+      "ssh_wait_timeout"                                                          : "30s",
+      "shutdown_command"                                                          : "echo 'shutdown -P now' > shutdown.sh; echo '{{ user `password` }}' | sudo -S sh 'shutdown.sh'",
+      "disk_size"                                                                 : 5000,
+      "format"                                                                    : "qcow2",
+      "headless"                                                                  : false,
+      "accelerator"                                                               : "kvm",
+      "http_directory"                                                            : "httpdir",
+      "http_port_min"                                                             : 10082,
+      "http_port_max"                                                             : 10089,
+      "ssh_host_port_min"                                                         : 2222,
+      "ssh_host_port_max"                                                         : 2229,
+      "ssh_username"                                                              : "{{ user `user` }}",
+      "ssh_password"                                                              : "{{ user `password` }}",
+      "ssh_port"                                                                  : 22,
+      "ssh_wait_timeout"                                                          : "90m",
+      "vm_name"                                                                   : "snooze-{{ user `hostid` }}",
+      "net_device"                                                                : "virtio-net",
+      "disk_interface"                                                            : "virtio",
+      "boot_command"                                                              :
+      [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic ",
+      "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian/preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname=snooze-{{ user `hostid` }} ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- <enter>"
+    ]
+    }
+  ]
+}
