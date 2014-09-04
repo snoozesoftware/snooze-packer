@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# this script will be run with sudo
+# this script will be run as root
 
 # add use $DMTCP
 DMTCP_USER=work
 DMTCP_GROUP=work
-//cryp passwd
-DMTCP_USER_PASSWD=dix3mC821HkgI
+DMTCP_USER_PASSWORD=work
 TARBALL=dmtcp.tar.gz
 SOFTWARE_ROOT=/home/$DMTCP_USER/software
 DMTCP_ROOT=$SOFTWARE_ROOT/dmtcp
 
-echo "useradd $DMTCP_USER -s /bin/bash -m -p $DMTCP_USER_PASSWD"
+echo "useradd $DMTCP_USER -s /bin/bash -m"
+echo "$DMTCP_USER:$DMTCP_USER_PASSWORD" | chpasswd
 useradd $DMTCP_USER -s /bin/bash -m
 
 # allow passwordless passwd
@@ -47,5 +47,5 @@ su work -c "cd $DMTCP_ROOT/test && make"
 su work -c "cd $DMTCP_ROOT/contrib/script && gcc -shared -fPIC -I$DMTCP_ROOT/include -o script.so script.c"
 
 # Extra dependencies 
-apt-get install python-boto nfs-common
+apt-get install -y python-boto nfs-common
 
